@@ -1,0 +1,57 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C38B466B-DDED-4C17-BEC6-425E101D8C25}|CRT_inquiry_program.vcxproj|D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\CRT_inquiry_program.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C38B466B-DDED-4C17-BEC6-425E101D8C25}|CRT_inquiry_program.vcxproj|solutionrelative:CRT_inquiry_program.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C38B466B-DDED-4C17-BEC6-425E101D8C25}|CRT_inquiry_program.vcxproj|D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\subway.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C38B466B-DDED-4C17-BEC6-425E101D8C25}|CRT_inquiry_program.vcxproj|solutionrelative:subway.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CRT_inquiry_program.c",
+              "DocumentMoniker": "D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\CRT_inquiry_program.c",
+              "RelativeDocumentMoniker": "CRT_inquiry_program.c",
+              "ToolTip": "D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\CRT_inquiry_program.c",
+              "RelativeToolTip": "CRT_inquiry_program.c",
+              "ViewState": "AgIAAFUCAAAAAAAAAAAAAAYAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-12-09T03:19:45.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "subway.txt",
+              "DocumentMoniker": "D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\subway.txt",
+              "RelativeDocumentMoniker": "subway.txt",
+              "ToolTip": "D:\\Learning\\\u7A0B\u5E8F\u8BBE\u8BA1C\u8BED\u8A00\\222025321262033 \u5218\u9053\u6EE1 C\u8BED\u8A00\u8BFE\u7A0B\u8BBE\u8BA1\u4F5C\u54C1\\CRT_inquiry_program\\subway.txt",
+              "RelativeToolTip": "subway.txt",
+              "ViewState": "AgIAALwBAAAAAAAAAAAqwM8BAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-12-09T03:20:43.097Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

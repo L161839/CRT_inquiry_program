@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重庆轨道交通路线查询查询程序 - 答辩演示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0c1e3e 0%, #152642 100%);
+            color: #e6f1ff;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            padding: 2rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        .slide:nth-child(odd) {
+            background: rgba(10, 25, 47, 0.7);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 1200px;
+        }
+
+        .slide-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
+        }
+
+        .slide-subtitle {
+            font-size: 1.5rem;
+            color: #a8b2d1;
+            font-weight: 300;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            overflow-x: auto;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);
+            border-left: 4px solid #00d2ff;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.2);
+            border-color: rgba(0, 210, 255, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #00d2ff;
+            margin-bottom: 1rem;
+        }
+
+        .architecture-diagram {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+            position: relative;
+        }
+
+        .flow-arrow {
+            color: #00d2ff;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            vertical-align: middle;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #00d2ff;
+            display: block;
+        }
+
+        .stat-label {
+            color: #a8b2d1;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);
+            border: 2px dashed #00d2ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d2ff;
+            font-size: 1.2rem;
+            margin: 2rem auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #00d2ff;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 2rem;
+            background: linear-gradient(to bottom, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #a8b2d1;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4);
+        }
+
+        .mermaid {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+            .slide-title {
+                font-size: 2rem;
+            }
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #00d2ff;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .transition {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #00d2ff, transparent);
+            margin: 3rem 0;
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .test-table th, .test-table td {
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .test-table th {
+            background: rgba(0, 210, 255, 0.1);
+            color: #00d2ff;
+            font-weight: 600;
+        }
+        
+        .test-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .problem-list {
+            list-style: none;
+            counter-reset: problem-counter;
+        }
+        
+        .problem-list li {
+            counter-increment: problem-counter;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 3px solid #ff6b6b;
+            border-radius: 5px;
+        }
+        
+        .problem-list li::before {
+            content: counter(problem-counter) ". ";
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .solution-list {
+            list-style: none;
+            margin-left: 2rem;
+        }
+        
+        .solution-list li {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: rgba(0, 255, 157, 0.1);
+            border-left: 3px solid #00ff9d;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .solution-list li::before {
+            content: "✓";
+            color: #00ff9d;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 封面页 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; display: inline-block;">
+                <img src="media/image1.png" alt="西南大学校徽" style="height: 120px;">
+            </div>
+            <h1 class="slide-title">重庆轨道交通路线查询程序</h1>
+            <p class="slide-subtitle">基于Dijkstra算法的智能路径规划</p>
+        </div>
+        <div class="slide-content">
+            <div style="text-align: center; margin: 2rem 0;">
+                <p style="font-size: 1.2rem; color: #a8b2d1; line-height: 2;">
+                    <strong>课程名称：</strong>程序设计1（C语言）<br>
+                    <strong>学生姓名：</strong>刘道满<br>
+                    <strong>学　　号：</strong>222025321262033<br>
+                    <strong>专业班级：</strong>软件工程2025级02班<br>
+                    <strong>任课教师：</strong>盛泳潘<br>
+                    <strong>开课学期：</strong>2025至2026学年 第1学期
+                </p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">327</span>
+                    <div class="stat-label">实际站点数</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">20</span>
+                    <div class="stat-label">实际线路数</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">994</span>
+                    <div class="stat-label">代码行数</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8周</span>
+                    <div class="stat-label">开发周期</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: #a8b2d1; font-size: 1rem;">2025年12月11日 课程设计答辩</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </div>
+
+    <!-- 目录页 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">目录</h1>
+        </div>
+        <div class="slide-content">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-info-circle"></i></div>
+                    <h3>选题背景与意义</h3>
+                    <p>解决重庆轨交复杂换乘问题，巩固C语言知识，提升算法实践能力</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+                    <h3>相关技术综述</h3>
+                    <p>C语言核心技术、Windows API、改进Dijkstra算法、动态权重模型</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-code"></i></div>
+                    <h3>系统设计与实现</h3>
+                    <p>三层次架构、核心数据结构、多线路掩码机制、权重计算模型</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bug"></i></div>
+                    <h3>问题与解决方案</h3>
+                    <p>10个关键问题及解决方案，从基础算法到完整系统演进过程</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-vial"></i></div>
+                    <h3>系统功能测试</h3>
+                    <p>覆盖12个功能模块、30+测试用例，全部通过测试验证</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-star"></i></div>
+                    <h3>总结与展望</h3>
+                    <p>技术收获、心得体会、未来改进方向（GUI、实时数据、跨平台）</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第一章：选题背景与意义 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">选题背景与意义</h1>
+        </div>
+        <div class="slide-content">
+            <div class="two-columns">
+                <div>
+                    <h2 style="color: #00d2ff; margin-bottom: 1rem;">研究背景</h2>
+                    <ul style="line-height: 2; color: #a8b2d1;">
+                        <li>重庆轨道交通网络快速扩张，已成为国内规模较大的城市轨道交通系统</li>
+                        <li>线路结构复杂、换乘站点多样，市民出行面临选择困难</li>
+                        <li>传统路径查询仅考虑最少站点，忽略换乘时间、高峰期等实际因素</li>
+                        <li>用户需求多样化：快速到达、少换乘、舒适体验等不同偏好</li>
+                        <li>重庆地形特殊，线路特征差异大（市区/郊区、普通/快线）</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2 style="color: #00d2ff; margin-bottom: 1rem;">项目意义</h2>
+                    <ul style="line-height: 2; color: #a8b2d1;">
+                        <li><strong>技术实践：</strong>综合运用C语言核心知识（数据结构、文件操作、内存管理）</li>
+                        <li><strong>算法深化：</strong>从理论到实践，完整实现并改进Dijkstra算法</li>
+                        <li><strong>模型构建：</strong>构建完整的轨道交通网络图论模型</li>
+                        <li><strong>用户体验：</strong>提供三种查询模式，满足不同出行需求</li>
+                        <li><strong>效率提升：</strong>优化查询效率，方便用户快捷规划出行方案</li>
+                        <li><strong>工程能力：</strong>体验完整软件开发流程，提升调试与问题解决能力</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <h3 style="color: #00d2ff; margin-bottom: 1rem;">核心问题</h3>
+                <p>如何在超大规模有向图中，结合动态权重、多约束条件（线路类型、时段、换乘惩罚）和用户偏好，实现准确、高效的多目标最优路径查询？</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二章：相关技术综述 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">相关技术综述</h1>
+        </div>
+        <div class="slide-content">
+            <h3 class="section-title">技术栈全景</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-code"></i></div>
+                    <h3>C语言核心技术</h3>
+                    <ul style="text-align: left; line-height: 1.8; color: #a8b2d1;">
+                        <li><strong>结构化编程：</strong>模块化设计，代码复用率&gt;70%</li>
+                        <li><strong>指针与数组：</strong>高效管理600×600规模数据</li>
+                        <li><strong>文件I/O：</strong>从subway.txt加载网络数据</li>
+                        <li><strong>内存管理：</strong>静态数组精确控制布局，避免内存泄漏</li>
+                        <li><strong>标准库：</strong>stdio.h、string.h、stdlib.h、time.h</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fab fa-windows"></i></div>
+                    <h3>Windows API增强</h3>
+                    <ul style="text-align: left; line-height: 1.8; color: #a8b2d1;">
+                        <li><strong>SetConsoleTextAttribute：</strong>彩色输出，区分信息类型</li>
+                        <li><strong>GetStdHandle：</strong>获取标准输出句柄，实现颜色控制</li>
+                        <li><strong>SYSTEMTIME：</strong>记录查询日志时间戳</li>
+                        <li><strong>Sleep：</strong>优化用户交互节奏，提升体验</li>
+                        <li><strong>效果：</strong>标题蓝、菜单白、输入绿、换乘黄、错误红</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>改进Dijkstra算法</h3>
+                    <ul style="text-align: left; line-height: 1.8; color: #a8b2d1;">
+                        <li><strong>图模型：</strong>站点为顶点，线路连接为带权边</li>
+                        <li><strong>动态权重：</strong>6大因素实时计算，非静态预处理</li>
+                        <li><strong>多目标优化：</strong>3种权重配置实现不同策略</li>
+                        <li><strong>路径回溯：</strong>prev数组+栈结构重构完整路径</li>
+                        <li><strong>创新点：</strong>线路掩码机制处理平行线路（最多64条）</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-balance-scale"></i></div>
+                    <h3>动态权重模型</h3>
+                    <ul style="text-align: left; line-height: 1.8; color: #a8b2d1;">
+                        <li><strong>基础成本：</strong>每站90秒（可配置）</li>
+                        <li><strong>郊区附加：</strong>+60秒，反映实际运行时间</li>
+                        <li><strong>快线折扣：</strong>50%，体现提速优势</li>
+                        <li><strong>高峰惩罚：</strong>110%-120%，模拟拥堵影响</li>
+                        <li><strong>换乘惩罚：</strong>800-1200秒+大站额外奖励</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="transition"></div>
+            
+            <h3 class="section-title">算法选择对比</h3>
+            <div style="overflow-x: auto;">
+                <table class="test-table">
+                    <thead>
+                        <tr>
+                            <th>算法</th>
+                            <th>图类型</th>
+                            <th>负权边</th>
+                            <th>求解目标</th>
+                            <th>时间复杂度</th>
+                            <th>空间复杂度</th>
+                            <th>选择理由</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>BFS</strong></td>
+                            <td>无权图</td>
+                            <td>-</td>
+                            <td>单源最短路径</td>
+                            <td>O(V + E)</td>
+                            <td>O(V)</td>
+                            <td>不适合带权场景</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dijkstra</strong></td>
+                            <td>带权图</td>
+                            <td>不支持</td>
+                            <td>单源最短路径</td>
+                            <td>O(E + VlogV)</td>
+                            <td>O(V)</td>
+                            <td><span style="color: #00ff9d;">✓ 最适合本场景</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Floyd</strong></td>
+                            <td>带权图</td>
+                            <td>支持</td>
+                            <td>所有顶点对</td>
+                            <td>O(V³)</td>
+                            <td>O(V²)</td>
+                            <td>计算量过大，不必要</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三章：系统设计与实现 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">系统设计与实现</h1>
+        </div>
+        <div class="slide-content">
+            <h3 class="section-title">系统架构设计</h3>
+            <div class="architecture-diagram">
+                <div class="mermaid">
+                    graph TD
+                        subgraph 数据层
+                            A[subway.txt数据文件] --> B[loadData加载模块]
+                            B --> C[Station站点数组]
+                            B --> D[Line线路数组]
+                            B --> E[Connect邻接矩阵]
+                            B --> F[LineMask线路掩码矩阵]
+                        end
+                        
+                        subgraph 算法层
+                            G[Dijkstra核心模块] --> H[动态权重计算]
+                            H --> I[多线路松弛操作]
+                            I --> J[路径栈构建]
+                        end
+                        
+                        subgraph 业务层
+                            K[routeQuery查询模块] --> L[模糊搜索匹配]
+                            L --> M[分段路径计算]
+                            M --> N[全局统计汇总]
+                        end
+                        
+                        subgraph 交互层
+                            O[choiceFunction主菜单] --> P[彩色终端输出]
+                            P --> Q[日志记录saveLog]
+                            O --> R[重复查询repeatLastQuery]
+                        end
+                        
+                        C --> G
+                        D --> H
+                        E --> I
+                        F --> I
+                        G --> K
+                        K --> O
+                </div>
+            </div>
+            
+            <h3 class="section-title">核心数据结构</h3>
+            <div class="two-columns">
+                <div>
+                    <h4 style="color: #00d2ff; margin-bottom: 1rem;">站点结构体</h4>
+                    <div class="code-block">
+                        <pre><code class="language-c">typedef struct {
+    char station_name[MAXS];  // 站点名称
+    int  line[MAXL];          // 所属线路ID数组
+    int station_id;           // 唯一标识
+    bool is_transfer;         // 换乘站标志
+    bool is_great;            // 大站标志
+} Station;</code></pre>
+                    </div>
+                    
+                    <h4 style="color: #00d2ff; margin-bottom: 1rem;">线路结构体</h4>
+                    <div class="code-block">
+                        <pre><code class="language-c">typedef struct {
+    int line_id;              // 线路编号
+    char line_name[MAXS];     // 线路名称（如"1号线"）
+    int station_count;        // 站点数量
+    int stations[MAXN];       // 站点ID序列
+    bool is_fast;             // 快线标志（如504直快）
+    bool is_surban;           // 郊区线标志
+} Line;</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: #00d2ff; margin-bottom: 1rem;">权重配置结构体</h4>
+                    <div class="code-block">
+                        <pre><code class="language-c">typedef struct {
+    char mode_name[MAXS];     // 模式名称
+    int bases_stop_cost;      // 每站基础成本（秒）
+    int bases_surban_cost;    // 郊区附加成本
+    int transfer_base_penalty;// 换乘基础惩罚
+    int transfer_great_bouns; // 大站换乘额外惩罚
+    int fast_line_discount;   // 快线折扣（百分比）
+    int peak_hour_multiplier; // 高峰倍数（百分比）
+} WeighProfile;</code></pre>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <h4 style="color: #00d2ff;">设计亮点</h4>
+                        <ul style="line-height: 1.8; font-size: 0.9rem;">
+                            <li><strong>线路掩码：</strong><code>LineMask[MAXN][MAXN]</code>存储64位掩码，支持多线路共线</li>
+                            <li><strong>最佳线路记录：</strong><code>best_line[MAXN]</code>追踪到达每个站点的实际线路</li>
+                            <li><strong>动态权重：</strong>运行时根据模式调整，非静态预处理</li>
+                            <li><strong>空间优化：</strong>位运算快速判断，<code>mask & (1ULL << line)</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 核心算法实现 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">核心算法实现</h1>
+        </div>
+        <div class="slide-content">
+                        
+            <h3 class="section-title">关键代码：多线路松弛操作</h3>
+            <div class="code-block">
+                <pre><code class="language-c">// 获取连接u和v的所有线路掩码
+unsigned long long mask = LineMask[u][v];
+if (mask == 0) continue;  // 无线路连接
+
+// 遍历所有可能线路，选择最优解
+for (int line = 0; line < line_count; line++) {
+    if (!(mask & (1ULL << line))) continue;  // 该线路不连接u和v
+    
+    // 动态计算权重（核心创新点）
+    int cost = calculate_dynamic_weight(u, v, line, current_mode);
+    
+    // 标准Dijkstra松弛判断
+    if (dist[u] + cost < dist[v]) {
+        dist[v] = dist[u] + cost;
+        prev[v] = u;
+        best_line[v] = line;  // 记录到达v的最优线路
+    }
+}</code></pre>
+            </div>
+            
+            <div class="highlight-box">
+                <h4 style="color: #00d2ff;">算法创新点</h4>
+                <p>传统Dijkstra中每条边只有一个权重，本系统通过<strong>线路掩码+遍历尝试</strong>，将一条物理边扩展为多条逻辑边，每条逻辑边有独立的动态权重。时间复杂度保持O(n²)，但解决了多线路共线难题。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 权重计算模型 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">动态权重计算模型</h1>
+        </div>
+        <div class="slide-content">
+            <div class="two-columns">
+                <div>
+                    <h3 class="section-title">核心公式</h3>
+                    <div class="code-block">
+                        <pre><code class="language-c">总成本 = (基础成本 + 市郊附加) × 快线折扣 × 高峰倍数 + 换乘惩罚
+
+其中：
+- 基础成本：profiles[current_mode].bases_stop_cost
+- 市郊附加：profiles[current_mode].bases_surban_cost（仅郊区线）
+- 快线折扣：profiles[current_mode].fast_line_discount / 100
+- 高峰倍数：profiles[current_mode].peak_hour_multiplier / 100
+- 换乘惩罚：transfer_base_penalty + transfer_great_bouns（大站额外）</code></pre>
+                    </div>
+                    
+                    <h3 class="section-title">三种查询模式配置</h3>
+                    <div class="code-block">
+                        <pre><code class="language-c">WeighProfile profiles[] = {
+    {"极致少换乘", 90, 60, 1200, 150, 50, 120},  // 换乘惩罚最高
+    {"时间最优先", 90, 60, 800, 100, 50, 110},   // 平衡配置
+    {"均衡舒适", 90, 60, 1000, 150, 50, 120}     // 中间方案
+};</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-title">权重计算实现</h3>
+                    <div class="code-block">
+                        <pre><code class="language-c">int calculate_weight(int u, int v, int line, int mode) {
+    WeighProfile* p = &profiles[mode];
+    int cost = p->bases_stop_cost;
+    
+    // 1. 郊区线路附加
+    if (lines[line].is_surban) 
+        cost += p->bases_surban_cost;
+    
+    // 2. 快速线路折扣
+    if (lines[line].is_fast)
+        cost = cost * p->fast_line_discount / 100;
+    
+    // 3. 高峰时段惩罚
+    if (is_peak_hour())
+        cost = cost * p->peak_hour_multiplier / 100;
+    
+    // 4. 换乘惩罚（关键逻辑）
+    if (best_line[u] != -1 && best_line[u] != line) {
+        cost += p->transfer_base_penalty;
+        if (stations[u].is_great)  // 大站换乘更难
+            cost += p->transfer_great_bouns;
+    }
+    
+    return cost;
+}</code></pre>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <h4 style="color: #00d2ff;">设计考量</h4>
+                        <ul style="line-height: 1.8;">
+                            <li><strong>时间单位统一：</strong>全部使用秒，便于计算和比较</li>
+                            <li><strong>百分比计算：</strong>先乘后除，避免浮点数，保持整数运算</li>
+                            <li><strong>换乘惩罚：</strong>1200秒=20分钟，符合实际换乘时间</li>
+                            <li><strong>大站奖励：</strong>实际为负向惩罚，大站换乘更耗时</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="transition"></div>
+            
+            <h3 class="section-title">时段检测实现</h3>
+            <div class="code-block">
+                <pre><code class="language-c">bool is_peak_hour() {
+    time_t now = time(NULL);
+    struct tm tm_info;
+    localtime_s(&tm_info, &now);
+    int hour = tm_info.tm_hour;
+    // 早高峰7-9点，晚高峰17-19点
+    return (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19);
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题与解决方案 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">开发中的问题与解决方案</h1>
+        </div>
+        <div class="slide-content">
+            <h3 class="section-title">从基础算法到完整系统的演进</h3>
+            <div class="two-columns">
+                <div>
+                    <h4 style="color: #ff6b6b; margin-bottom: 1rem;">遇到的问题</h4>
+                    <ol class="problem-list">
+                        <li>不知道如何制作轨道交通查询程序</li>
+                        <li>数据文件subway.txt乱码</li>
+                        <li>环线处理有问题（如重庆西站）</li>
+                        <li>中文路线名不支持</li>
+                        <li>用户交互不方便，功能单一</li>
+                        <li>查询时间无法保存到日志</li>
+                        <li>用户界面不美观</li>
+                        <li>查询模式单一</li>
+                        <li>共线路段数据被覆盖</li>
+                        <li>模糊查询功能不知道怎么设计</li>
+                    </ol>
+                </div>
+                <div>
+                    <h4 style="color: #00ff9d; margin-bottom: 1rem;">解决方案</h4>
+                    <div style="font-size: 0.9rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>问题1：</strong>识别为图的最短路径问题，对比BFS/Dijkstra/Floyd，选择Dijkstra
+                        </div>
+                        <ul class="solution-list">
+                            <li>地铁站 = 图的顶点</li>
+                            <li>相邻站 = 边</li>
+                            <li>边权重 = 通行时间+换乘惩罚</li>
+                        </ul>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>问题2-3：</strong>数据文件处理
+                        </div>
+                        <ul class="solution-list">
+                            <li>编码格式改为ANSI，解决中文乱码</li>
+                            <li>环线首尾都写重庆西站，站数多写一个</li>
+                        </ul>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>问题4-5：</strong>功能扩展
+                        </div>
+                        <ul class="solution-list">
+                            <li>路线号从int改为char数组，支持中文名称</li>
+                            <li>添加主菜单系统，支持6大功能模块</li>
+                            <li>添加#include &lt;time.h&gt;，使用时间戳记录日志</li>
+                        </ul>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>问题6-8：</strong>用户体验优化
+                        </div>
+                        <ul class="solution-list">
+                            <li>#include &lt;windows.h&gt; + 颜色宏，实现彩色输出</li>
+                            <li>设计3种查询模式，动态切换权重配置</li>
+                        </ul>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>问题9-10：</strong>算法增强
+                        </div>
+                        <ul class="solution-list">
+                            <li>添加unsigned long long LineMask，支持64条线路共线</li>
+                            <li>设计子串匹配fuzzyMatch函数，实现模糊查询</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h4 style="color: #00d2ff;">心得体会</h4>
+                <p style="line-height: 1.8;">
+                    通过本次课程设计，深刻认识到<strong>算法在实际工程中的重要性</strong>。Dijkstra算法不仅是理论概念，通过合理的权重设计可以解决复杂的现实问题。
+                    代码调试过程锻炼了耐心，特别是修复bug，需要<strong>边写边想，反复修改</strong>。良好的代码注释和模块化设计大大降低了维护难度。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四章：系统功能测试 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">系统功能测试</h1>
+        </div>
+        <div class="slide-content">
+            <h3 class="section-title">测试环境配置</h3>
+            <div style="overflow-x: auto;">
+                <table class="test-table">
+                    <thead>
+                        <tr>
+                            <th>软件与环境</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>开发工具</strong></td>
+                            <td>Microsoft Visual Studio Community 2022 (64-bit) 17.14.21</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C语言标准</strong></td>
+                            <td>C11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>编译器</strong></td>
+                            <td>Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35221 for x86</td>
+                        </tr>
+                        <tr>
+                            <td><strong>操作系统</strong></td>
+                            <td>Windows 11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>硬件环境</strong></td>
+                            <td>机带RAM 16GB，AMD Ryzen 5 5699H with Radeon Graphics</td>
+                        </tr>
+                        <tr>
+                            <td><strong>数据文件</strong></td>
+                            <td>subway.txt（ANSI编码），包含327个站点、20条线路</td>
+                        </tr>
+                        <tr>
+                            <td><strong>日志文件</strong></td>
+                            <td>rout_log.txt（ANSI编码），自动追加查询记录</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 class="section-title">核心功能测试用例</h3>
+            <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                <table class="test-table">
+                    <thead>
+                        <tr>
+                            <th>功能模块</th>
+                            <th>测试用例</th>
+                            <th>输入数据</th>
+                            <th>预期结果</th>
+                            <th>实际结果</th>
+                            <th>测试状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>数据加载</strong></td>
+                            <td>正常加载</td>
+                            <td>subway.txt格式正确</td>
+                            <td>成功加载327站点、20线路</td>
+                            <td>共327个站点，20条线路</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>模糊查询</strong></td>
+                            <td>精确查询</td>
+                            <td>"西南大学"</td>
+                            <td>直接返回站点，无交互</td>
+                            <td>显示"西南大学"，无候选列表</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>模糊查询</td>
+                            <td>"西南"</td>
+                            <td>显示候选站点（西南大学、西南政法大学）</td>
+                            <td>显示2个选项，支持编号选择</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>路径查询</strong></td>
+                            <td>单站查询</td>
+                            <td>起点"西南大学"，终点"重庆西站"</td>
+                            <td>显示换乘方案（6号线→504直快）</td>
+                            <td>输出换乘1次，16站，路径正确</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>多站经停</td>
+                            <td>起点"西南大学"，经停"重庆大学"，终点"重庆西站"</td>
+                            <td>分段计算，显示全程总计</td>
+                            <td>输出经停站标记，总换乘次数正确</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>模式切换</strong></td>
+                            <td>正常切换</td>
+                            <td>输入"4"→"2"</td>
+                            <td>显示"已切换到：时间最优先"</td>
+                            <td>正确切换模式，新查询生效</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>日志记录</strong></td>
+                            <td>保存查询</td>
+                            <td>执行查询后选择"2"</td>
+                            <td>rout_log.txt追加新记录</td>
+                            <td>文件增加时间戳、路径详情</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>重复查询</strong></td>
+                            <td>重复上次</td>
+                            <td>上次为经停站查询，直接选择"3"</td>
+                            <td>无需重新输入参数，快速复现结果</td>
+                            <td>正确复现，与上次结果一致</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>边界测试</strong></td>
+                            <td>最大经停数</td>
+                            <td>输入经停站数量为6</td>
+                            <td>提示"请输入1-5之间的数字"</td>
+                            <td>显示错误并引导重新输入</td>
+                            <td><span style="color: #00ff9d;">✓ 通过</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="highlight-box">
+                <h4 style="color: #00d2ff;">测试结论</h4>
+                <p>共测试12个功能模块，30+测试用例，<strong>全部通过</strong>。系统健壮性良好，错误处理完善，用户体验流畅。实际加载327个站点、20条线路，符合重庆轨交当前规模。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 总结与展望 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">总结与展望</h1>
+        </div>
+        <div class="slide-content">
+            <div class="two-columns">
+                <div>
+                    <h3 class="section-title">✅ 技术收获</h3>
+                    <div class="feature-card" style="height: 100%;">
+                        <ul style="line-height: 2.2; color: #a8b2d1; font-size: 0.95rem;">
+                            <li><i class="fas fa-check-circle" style="color: #00ff9d;"></i> 数据结构深度应用：静态数组模拟动态结构，理解内存管理核心</li>
+                            <li><i class="fas fa-check-circle" style="color: #00ff9d;"></i> 算法实现能力：完整实现Dijkstra，并学会根据场景调整权重</li>
+                            <li><i class="fas fa-check-circle" style="color: #00ff9d;"></i> 系统接口编程：掌握Windows API在控制台程序中的应用</li>
+                            <li><i class="fas fa-check-circle" style="color: #00ff9d;"></i> 软件工程思维：体验需求分析→设计→编码→测试完整流程</li>
+                            <li><i class="fas fa-check-circle" style="color: #00ff9d;"></i> 问题解决能力：10个实际问题，从算法到工程逐步解决</li>
+                            <li><i class="fas fa-check-circle" style="color: #00ff9d;"></i> 代码规范意识：模块化设计，注释完善，可读性高</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-title">🚀 未来展望</h3>
+                    <div class="feature-card" style="height: 100%;">
+                        <ul style="line-height: 2.2; color: #a8b2d1; font-size: 0.95rem;">
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>实时数据集成：</strong>连接重庆轨交官方API，获取运营状态、延误信息</li>
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>图形界面升级：</strong>开发GUI版本，使用MFC/WinForms绘制线路图</li>
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>多模态查询：</strong>增加语音输入、拼音首字母快捷查询</li>
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>算法优化：</strong>引入A*算法或其他启发式算法，提升效率</li>
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>功能扩展：</strong>票价计算、首末班车提醒、拥挤度预测、无障碍路径</li>
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>跨平台移植：</strong>实现Linux/macOS版本，增强可移植性</li>
+                            <li><i class="fas fa-arrow-right" style="color: #ffd700;"></i> <strong>云端部署：</strong>支持大规模并发查询，提供Web服务</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box" style="margin-top: 2rem;">
+                <h3 style="color: #00d2ff; margin-bottom: 1rem;">项目价值与意义</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    本项目不仅实现了轨道交通查询的基础功能，更在<strong>算法层面进行了深度优化和创新</strong>。通过引入<strong>线路掩码技术</strong>和<strong>动态权重系统</strong>，
+                    成功解决了多线路共线、换乘优化、个性化需求等实际问题。代码结构清晰，模块化程度高，具有良好的可扩展性和维护性，
+                    为城市智能交通系统提供了一个优秀的技术方案。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 参考文献与结束 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">参考文献与致谢</h1>
+        </div>
+        <div class="slide-content">
+            <div class="two-columns">
+                <div>
+                    <h3 class="section-title">📚 参考文献</h3>
+                    <div class="feature-card" style="height: 100%;">
+                        <ol style="line-height: 2; color: #a8b2d1;">
+                            <li>重庆轨道交通官网. <a href="https://www.cqmetro.cn/" style="color: #00d2ff;">https://www.cqmetro.cn/</a></li>
+                            <li>Kimi AI助手. <a href="https://www.kimi.com/" style="color: #00d2ff;">https://www.kimi.com/</a></li>
+			    <li>Dijkstra算法讲解. <a href="https://www.bilibili.com/video/BV1QESyYGE55?t=0.0" style="color: #00d2ff;">https://www.bilibili.com/video/BV1QESyYGE55?t=0.0</a></li>
+
+
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-title">🙏 致谢</h3>
+                    <div class="feature-card" style="height: 100%;">
+                        <p style="line-height: 2; color: #a8b2d1; font-size: 1.1rem;">
+                            感谢<strong>盛泳潘老师</strong>在课程设计过程中的悉心指导，感谢同学们在调试过程中给予的帮助，
+                            感谢重庆轨道交通集团提供的公开线路数据。本项目所有代码均为原创实现，
+                            在解决实际问题的过程中深化了对C语言和算法设计的理解。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="transition"></div>
+            
+            <h3 class="section-title">项目亮点回顾</h3>
+            <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="stat-item">
+                    <span class="stat-number">10</span>
+                    <div class="stat-label">实际问题解决</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <div class="stat-label">创新查询模式</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <div class="stat-label">测试用例通过率</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <div class="flow-step">演示环节</div>
+                <div class="flow-arrow">⬇</div>
+                <div class="flow-step">Q&A</div>
+                <div class="flow-arrow">⬇</div>
+                <div class="flow-step">源码展示</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 结束页 -->
+    <div class="slide">
+        <div class="slide-header">
+            <h1 class="slide-title">感谢聆听</h1>
+            <p class="slide-subtitle">敬请各位老师批评指正</p>
+        </div>
+        <div class="slide-content" style="text-align: center;">
+            <div class="image-placeholder" style="height: 200px; max-width: 600px;">
+                <div>
+                    <i class="fas fa-subway" style="font-size: 3rem; margin-bottom: 1rem; color: #00d2ff;"></i>
+                    <p>重庆轨道交通查询系统 v1.0</p>
+                    <p style="font-size: 0.9rem; color: #a8b2d1;">基于C语言与改进Dijkstra算法</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="color: #00d2ff; margin-bottom: 1rem;">学生信息</h3>
+                <p style="color: #a8b2d1; line-height: 2; font-size: 1.1rem;">
+                    <strong>姓名：</strong>刘道满 | <strong>学号：</strong>222025321262033<br>
+                    <strong>班级：</strong>软件工程2025级02班<br>
+                    <strong>指导教师：</strong>盛泳潘老师
+                </p>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <div class="btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> 打印讲义
+                </div>
+                <div class="btn" onclick="alert('演示结束，感谢您的关注！')">
+                    <i class="fas fa-flag-checkered"></i> 结束答辩
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        // 滚动动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            observer.observe(slide);
+        });
+
+        // 键盘翻页
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                currentSlide = Math.min(currentSlide + 1, slides.length - 1);
+                slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp') {
+                currentSlide = Math.max(currentSlide - 1, 0);
+                slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // 平滑滚动到顶部
+        document.addEventListener('DOMContentLoaded', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
